@@ -11,8 +11,10 @@ namespace MARVIN\API\MAMBA;
  * @author nefrit
  */
 class Core {
-    static $loginPage   = 'http://mamba.ru/tips/?tip=login';
+    static $loginPage		= 'http://mamba.ru/tips/?tip=login';
+	static $userAnketa	= 'http://mamba.ru/%s/?afolder=dating';
     var $url;
+    
     function __construct() {
         $this->url  = new \MARVIN\CORE\Http();
     }
@@ -47,9 +49,12 @@ class Core {
             throw new \MARVIN\EXCEPTIONS\API\MAMBA\LoginFail ();
     }
     
-    public function getUser()
+    public function getUser($username)
     {
-        return true;
+        $link	= sprintf(self::$userAnketa, $username);
+		$page	= $this->url->get($link);
+		$user	= User::load($page);
+		return $user;
     }
 }
 
